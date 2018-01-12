@@ -1,0 +1,35 @@
+---
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Copy redis config
+  config_template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ redis_user }}"
+    group: "{{ redis_group }}"
+    mode: "0770"
+    config_overrides: "{{ item.config_overrides }}"
+    config_type: "{{ item.config_type }}"
+  with_items:
+    - src: "redis-server.conf.j2"
+      dest: "{{ redis_server_etc_file }}"
+      config_overrides: "{{ redis_redis-server_conf_overrides }}"
+      config_type: "ini"
+    - src: "redis-sentinel.conf.j2"
+      dest: "{{ redis_sentinel_etc_file }}"
+      config_overrides: "{{ redis_redis-sentinel_conf_overrides }}"
+      config_type: "ini"
+  notify:
+    - Restart redis services
+

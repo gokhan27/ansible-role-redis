@@ -1,0 +1,6 @@
+## redis
+horizon_enable_redis: False
+
+horizon_pip_packages:
+  - redis-dashboard
+  - python-redisclient

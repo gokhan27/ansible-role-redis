@@ -1,0 +1,3 @@
+# {{ ansible_managed }}
+
+D /var/run/{{ item.value.service_name }} 2755 {{ redis_user }} {{ redis_group }}

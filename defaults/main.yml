@@ -1,0 +1,123 @@
+---
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## Installation options
+redis_version: 4.0.6
+redis_install_dir: /opt/redis
+redis_user: redis
+redis_group: "{{ redis_user }}"
+redis_dir: /var/lib/redis/{{ redis_port }}
+redis_download_url: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
+redis_tarball: false
+redis_package_state: "latest"
+# The open file limit for Redis/Sentinel
+redis_nofile_limit: 16384
+
+redis_bin_dir: /usr/local/bin
+redis_server_etc_file: /etc/redis/redis-server.conf
+redis_sentinel_etc_file: /etc/redis/redis-sentinel.conf
+## Networking/connection options
+redis_bind: 127.0.0.1
+redis_port: 6379
+redis_password: false
+redis_tcp_backlog: 511
+redis_tcp_keepalive: 0
+# Max connected clients at a time
+redis_maxclients: 10000
+redis_timeout: 0
+# Socket options
+# Set socket_path to the desired path to the socket. E.g. /var/run/redis/{{ redis_port }}.sock
+redis_socket_path: false
+redis_socket_perm: 755
+
+## Replication options
+# Set slaveof just as you would in redis.conf. (e.g. "redis01 6379")
+redis_slaveof: false
+# Make slaves read-only. "yes" or "no"
+redis_slave_read_only: "yes"
+redis_slave_priority: 100
+redis_repl_backlog_size: false
+
+## Logging
+redis_logfile: /var/log/redis/redis-server
+
+## General configuration
+redis_daemonize: "yes"
+redis_pidfile: /var/run/redis/redis-server.pid
+# Number of databases to allow
+redis_databases: 16
+redis_loglevel: notice
+# Log queries slower than this many milliseconds. -1 to disable
+redis_slowlog_log_slower_than: 10000
+# Maximum number of slow queries to save
+redis_slowlog_max_len: 128
+# Redis memory limit (e.g. 4294967296, 4096mb, 4gb)
+redis_maxmemory: false
+redis_maxmemory_policy: noeviction
+redis_rename_commands: []
+# How frequently to snapshot the database to disk
+# e.g. "900 1" => 900 seconds if at least 1 key changed
+redis_save:
+  - 900 1
+  - 300 10
+  - 60 10000
+redis_appendonly: "no"
+redis_appendfilename: "appendonly.aof"
+redis_appendfsync: "everysec"
+redis_no_appendfsync_on_rewrite: "no"
+redis_auto_aof_rewrite_percentage: "100"
+redis_auto_aof_rewrite_min_size: "64mb"
+
+## Redis sentinel configs
+# Set this to true on a host to configure it as a Sentinel
+redis_sentinel: false
+redis_sentinel_dir: /var/lib/redis/sentinel_{{ redis_sentinel_port }}
+redis_sentinel_bind: 0.0.0.0
+redis_sentinel_port: 26379
+redis_sentinel_pidfile: /var/run/redis/redis-sentinel.pid
+redis_sentinel_logfile: /var/log/redis/redis-sentinel
+
+redis_sentinel_monitors:
+  - name: master01
+    host: localhost
+    port: 6379
+    quorum: 2
+    auth_pass: ant1r3z
+    down_after_milliseconds: 30000
+    parallel_syncs: 1
+    failover_timeout: 180000
+    notification_script: false
+    client_reconfig_script: false
+
+redis_server_init_overrides: {}
+redis_sentinel_init_overrides: {}
+
+redis_services:
+  redis-server:
+    group: redis_server
+    service_name: redis-server
+    init_config_overrides: "{{ redis_server_init_overrides }}"
+  redis-sentinel:
+    group: redis_sentinel
+    service_name: redis-sentinel
+    init_config_overrides: "{{ redis_server_init_overrides }}"
+
+install_test_packages: False
+
+redis_role_project_group: redis_all
+
+## Tunable overrides
+redis_redis-server_conf_overrides: {}
+redis_redis-sentinel_conf_overrides: {}
+
+
