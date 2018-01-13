@@ -33,7 +33,9 @@
     group: "{{ item.group|default(redis_group) }}"
     mode: "{{ item.mode|default('0770') }}"
   with_items:
-    - { path: "/var/lib/redis", mode: "0770" }
+    - { path: "/var/lib/redis-server", mode: "0770" }
+    - { path: "/var/lib/redis-sentinel", mode: "0770" }
+    - { path: "/var/run/redis", mode: "0770" }
     - { path: "/var/log/redis", mode: "0770" }
     - { path: "/etc/redis", mode: "0770" }
 

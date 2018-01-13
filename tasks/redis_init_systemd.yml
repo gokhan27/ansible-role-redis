@@ -14,7 +14,7 @@
 
 - name: Create TEMP run dir
   file:
-    path: "/var/run/{{ item.value.service_name }}.pid"
+    path: "/var/run/redis/{{ item.value.service_name }}.pid"
     state: directory
     owner: "{{ redis_user }}"
     group: "{{ redis_group }}"

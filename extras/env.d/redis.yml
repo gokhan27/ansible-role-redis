@@ -1,5 +1,4 @@
 ---
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -12,9 +11,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-redis_service_region: "{{ service_region }}"
-redis_galera_user: redis
-redis_galera_database: redis
-redis_galera_address: "{{ internal_lb_vip_address }}"
-redis_connection_string: "mysql+pymysql://{{ redis_galera_user }}:{{ redis_container_db_password }}@{{ redis_galera_address }}/{{ redis_galera_database }}?charset=utf8"
-redis_rabbitmq_host_group: "{{ rabbitmq_host_group }}"
+component_skel:
+  redis_server:
+    belongs_to:
+      - redis_all
+  redis_sentinel:
+    belongs_to:
+      - redis_all
+
+container_skel:
+  redis_container:
+    belongs_to:
+      - redis-infra_containers
+    contains:
+      - redis_server
+      - redis_sentinel
+    properties:
+      service_name: redis
+
+physical_skel:
+  redis-infra_containers:
+    belongs_to:
+      - all_containers
+  redis-infra_hosts:
+    belongs_to:
+      - hosts
+

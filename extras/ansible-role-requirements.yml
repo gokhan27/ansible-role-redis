@@ -1,4 +1,4 @@
 - name: os_redis
   scm: git
-  src: https://github.com/b3lab/openstack-ansible-os_redis.git
-  version: stable/pike
+  src: https://github.com/gokhan27/openstack-ansible-os_redis.git
+  version: master

@@ -31,11 +31,13 @@
   tags:
     - redis-install
 
+- include: "redis_init_{{ ansible_service_mgr }}.yml"
+  tags:
+    - redis-config
+
 - include: redis_post_install.yml
   tags:
     - redis-config
 
-- include: "redis_init_{{ ansible_service_mgr }}.yml"
-  tags:
-    - redis-config
+
 

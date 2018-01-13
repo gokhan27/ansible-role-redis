@@ -1,0 +1,17 @@
+haproxy_service_configs:
+  - service:
+      haproxy_service_name: redis
+      haproxy_backend_nodes: "{{ groups['redis_api'] | default([]) }}"
+      haproxy_ssl: "{{ haproxy_ssl }}"
+      haproxy_port: 26379
+      haproxy_balance_type: http
+      haproxy_backend_options:
+        - "option tcp-check"
+        - "tcp-check connect"
+        - "tcp-check send PING\r\n"
+        - "tcp-check expect string +PONG"
+        - "tcp-check send info\ replication\r\n"
+        - "tcp-check expect string role:master"
+        - "tcp-check send QUIT\r\n"
+        - "tcp-check expect string +OK"
+

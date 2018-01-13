@@ -1,0 +1,54 @@
+---
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Install the redis-server master and redis-sentinel on master
+  hosts: hostvars[groups['redis_all'][0]]
+  gather_facts: "{{ osa_gather_facts | default(True) }}"
+  max_fail_percentage: 20
+  user: root
+  pre_tasks:
+    - include: common-tasks/os-lxc-container-setup.yml
+    - include: common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-redis"
+            dest: "/var/log/redis"
+  roles:
+    - role: "os_redis"
+  vars:
+    is_metal: "{{ properties.is_metal|default(false) }}"
+  environment: "{{ deployment_environment_variables | default({}) }}"
+  tags:
+    - redis
+
+- name: Install the redis-server slave and redis-sentinel nodes
+  hosts: hostvars[groups['redis_all'][1:3]]
+  gather_facts: "{{ osa_gather_facts | default(True) }}"
+  max_fail_percentage: 20
+  user: root
+  pre_tasks:
+    - include: common-tasks/os-lxc-container-setup.yml
+    - include: common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-redis"
+            dest: "/var/log/redis"
+  roles:
+    - role: "os_redis"
+  vars:
+    is_metal: "{{ properties.is_metal|default(false) }}"
+    redis_slaveof: "{{ hostvars[groups['redis_all'][0]]['ansible_eth0']['ipv4']['address'] }} {{ redis_port }}"
+  environment: "{{ deployment_environment_variables | default({}) }}"
+  tags:
+    - redis-slave
