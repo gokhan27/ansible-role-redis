@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: Install the redis-server master and redis-sentinel on master
-  hosts: hostvars[groups['redis_all'][0]]
+  hosts: redis_all[0]
   gather_facts: "{{ osa_gather_facts | default(True) }}"
   max_fail_percentage: 20
   user: root
@@ -33,7 +33,7 @@
     - redis
 
 - name: Install the redis-server slave and redis-sentinel nodes
-  hosts: hostvars[groups['redis_all'][1:3]]
+  hosts: redis_all[1:3]
   gather_facts: "{{ osa_gather_facts | default(True) }}"
   max_fail_percentage: 20
   user: root
