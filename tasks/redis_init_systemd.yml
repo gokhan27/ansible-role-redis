@@ -25,7 +25,7 @@
 
 - name: Create tempfile.d entry
   template:
-    src: "redis-systemd-tempfiles.j2"
+    src: "redis-systemd-tmpfiles.j2"
     dest: "/etc/tmpfiles.d/openstack-{{ item.value.service_name }}.conf"
     mode: "0644"
     owner: "root"

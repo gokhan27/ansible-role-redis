@@ -6,7 +6,7 @@ After=syslog.target
 After=network.target
 
 [Service]
-Type=simple
+Type=Type=forking
 User={{ redis_user }}
 Group={{ redis_group }}
 
@@ -20,7 +20,7 @@ ExecStop=/usr/local/bin/redis-cli shutdown
 TimeoutSec=120
 Restart=on-failure
 RestartSec=2
-
+LimitNOFILE=10240
 # This creates a specific slice which all services will operate from
 #  The accounting options give us the ability to see resource usage through
 #  the `systemd-cgtop` command.

@@ -12,24 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Copy redis config
-  config_template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+- name: create redis server config file
+  template:
+    src: redis-server.conf.j2
+    dest: "{{ redis_server_etc_file }}"
     owner: "{{ redis_user }}"
     group: "{{ redis_group }}"
-    mode: "0770"
-    config_overrides: "{{ item.config_overrides }}"
-    config_type: "{{ item.config_type }}"
-  with_items:
-    - src: "redis-server.conf.j2"
-      dest: "{{ redis_server_etc_file }}"
-      config_overrides: "{{ redis_redis-server_conf_overrides }}"
-      config_type: "ini"
-    - src: "redis-sentinel.conf.j2"
-      dest: "{{ redis_sentinel_etc_file }}"
-      config_overrides: "{{ redis_redis-sentinel_conf_overrides }}"
-      config_type: "ini"
+    mode: 0770
+
+- name: create redis sentinel config file
+  template:
+    src: redis-sentinel.conf.j2
+    dest: "{{ redis_sentinel_etc_file }}"
+    owner: "{{ redis_user }}"
+    group: "{{ redis_group }}"
+    mode: 0770
   notify:
     - Restart redis services
-
