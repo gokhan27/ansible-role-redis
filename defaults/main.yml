@@ -13,7 +13,7 @@
 
 ## Installation options
 redis_version: 4.0.6
-redis_install_dir: /usr/local/src
+#redis_install_dir: /opt
 redis_user: redis
 redis_group: "{{ redis_user }}"
 redis_dir: /var/lib/redis-server
@@ -49,7 +49,7 @@ redis_slave_priority: 100
 redis_repl_backlog_size: false
 
 ## Logging
-redis_logfile: /var/log/redis/redis-server
+redis_logfile: /var/log/redis/redis-server.log
 
 ## General configuration
 redis_daemonize: "yes"
@@ -85,7 +85,7 @@ redis_sentinel_dir: /var/lib/redis-sentinel
 redis_sentinel_bind: 0.0.0.0
 redis_sentinel_port: 26379
 redis_sentinel_pidfile: /var/run/redis/redis-sentinel.pid
-redis_sentinel_logfile: /var/log/redis/redis-sentinel
+redis_sentinel_logfile: /var/log/redis/redis-sentinel.log
 
 redis_sentinel_monitors:
   - name: master01
