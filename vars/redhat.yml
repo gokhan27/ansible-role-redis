@@ -14,3 +14,7 @@
 
 # Common packages
 redis_distro_packages:
+  - wget
+  - tcl
+  - gcc
+  - make

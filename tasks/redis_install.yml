@@ -28,27 +28,28 @@
 - name: download redis
   get_url:
     url: "{{ redis_download_url }}"
-    dest: /usr/local/src/redis-{{ redis_version }}.tar.gz
+    dest: "/opt/redis-{{ redis_version }}.tar.gz"
   when: not redis_tarball
 
 - name: upload redis
   copy:
     src: "{{ redis_tarball }}"
-    dest: /usr/local/src/redis-{{ redis_version }}.tar.gz
+    dest: "/opt/redis-{{ redis_version }}.tar.gz"
   when: redis_tarball
 
 - name: Extract redis targz
   unarchive:
-    src: /usr/local/src/redis-{{ redis_version }}.tar.gz
-    dest: /usr/local/src/
+    remote_src: yes
+    src: "/opt/redis-{{ redis_version }}.tar.gz"
+    dest: "/opt/redis-{{ redis_version }}"
 
 
 - name: Build redis binaries
   make:
-    chdir: /usr/local/src/redis-{{ redis_version }}
+    chdir: "/opt/redis-{{ redis_version }}/redis-{{ redis_version }}"
 
 - name:  install redis services
   make:
-    chdir: /usr/local/src/redis-{{ redis_version }}
+    chdir: "/opt/redis-{{ redis_version }}/redis-{{ redis_version }}"
     target: install
   become: yes

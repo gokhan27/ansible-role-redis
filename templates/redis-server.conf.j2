@@ -138,7 +138,7 @@ databases {{ redis_databases }}
 #
 #   save ""
 
-{% for save in redis_databases -%}
+{% for save in redis_save -%}
 save {{ save }}
 {% endfor -%}
 

@@ -10,7 +10,7 @@ Type=Type=forking
 User={{ redis_user }}
 Group={{ redis_group }}
 
-{% if item.value.service_name is redis-server %}
+{% if item.value.service_name == "redis-server" %}
 ExecStart={{ redis_bin_dir }}/{{ item.value.service_name }} {{ redis_server_etc_file }}
 {% else %}
 ExecStart={{ redis_bin_dir }}/{{ item.value.service_name }} {{ redis_sentinel_etc_file }}

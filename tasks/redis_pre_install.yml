@@ -38,6 +38,7 @@
     - { path: "/var/run/redis", mode: "0770" }
     - { path: "/var/log/redis", mode: "0770" }
     - { path: "/etc/redis", mode: "0770" }
+    - { path: "/opt/redis-{{ redis_version }}", mode: "0770" }
 
 - name: Test for log directory or link
   shell: |
