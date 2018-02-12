@@ -63,7 +63,18 @@ tcp-backlog {{ redis_tcp_backlog }}
 #
 # bind 192.168.1.100 10.0.0.1
 # bind 127.0.0.1
-bind {{ redis_bind }}
+
+{% if inventory_hostname == groups['redis_all'][0] -%}
+bind {{ hostvars[groups['redis_all'][0]]['ansible_host'] }}
+{% endif -%}
+
+{% if inventory_hostname == groups['redis_all'][1] -%}
+bind {{ hostvars[groups['redis_all'][1]]['ansible_host'] }}
+{% endif -%}
+
+{% if inventory_hostname == groups['redis_all'][2] -%}
+bind {{ hostvars[groups['redis_all'][2]]['ansible_host'] }}
+{% endif -%}
 
 # Specify the path for the Unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen

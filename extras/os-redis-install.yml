@@ -48,7 +48,7 @@
     - role: "os_redis"
   vars:
     is_metal: "{{ properties.is_metal|default(false) }}"
-    redis_slaveof: "{{ hostvars[groups['redis_all'][0]]['ansible_eth0']['ipv4']['address'] }} {{ redis_port }}"
+    redis_slaveof: " {{ redis_master_cluster_node }} {{ redis_port }}"
   environment: "{{ deployment_environment_variables | default({}) }}"
   tags:
     - redis-slave
