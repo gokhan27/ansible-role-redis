@@ -28,5 +28,4 @@
     group: "{{ redis_group }}"
     mode: 0770
   notify:
-    - Reload the systemd daemon
     - Restart redis services
